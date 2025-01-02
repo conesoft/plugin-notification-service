@@ -1,0 +1,25 @@
+{
+  "name": "Notification Service by Conesoft",
+  "short_name": "Conesoft Notifications",
+  "description": "a notification service for conesoft applications and websites",
+  "id": "https://notifications.conesoft.net",
+  "orientation": "any",
+  "lang": "en",
+  "dir": "auto",
+  "categories": [
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "/icons/conesoft-hosting.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "start_url": "https://notifications.conesoft.net",
+  "display": "standalone",
+  "display_override": [ "window-controls-overlay" ]
+}

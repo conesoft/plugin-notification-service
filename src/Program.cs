@@ -29,7 +29,7 @@ app.UseStaticFiles(new StaticFileOptions
     ServeUnknownFileTypes = true,
     RequestPath = "/content"
 });
-
-app.MapGet("/", () => "Hello, Notifications");
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.Run();
