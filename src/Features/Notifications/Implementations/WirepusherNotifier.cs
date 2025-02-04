@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
+﻿using Conesoft.Plugin.NotificationService.Features.Notifications.Content;
+using Conesoft.Plugin.NotificationService.Features.Notifications.Interfaces;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 
-namespace Conesoft.Plugin.NotificationService.Notifiers;
+namespace Conesoft.Plugin.NotificationService.Features.Notifications.Implementations;
 
 class WirepusherNotifier(IHttpClientFactory factory, IConfiguration configuration) : INotifier
 {

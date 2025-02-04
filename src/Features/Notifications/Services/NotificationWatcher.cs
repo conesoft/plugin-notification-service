@@ -1,5 +1,7 @@
 ﻿using Conesoft.Files;
-using Conesoft.Plugin.NotificationService.Notifiers;
+using Conesoft.Plugin.NotificationService.Features.ContentStorage;
+using Conesoft.Plugin.NotificationService.Features.Notifications.Content;
+using Conesoft.Plugin.NotificationService.Features.Notifications.Interfaces;
 using FolkerKinzel.DataUrls;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -9,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conesoft.Plugin.NotificationService;
+namespace Conesoft.Plugin.NotificationService.Features.Notifications.Services;
 
 class NotificationWatcher(Storage storage, IEnumerable<INotifier> notifiers) : BackgroundService
 {

@@ -1,0 +1,30 @@
+@keyframes flickerOpacity {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.7;
+    }
+}
+
+@keyframes flickerGlow {
+    from {
+        text-shadow: 0 0 2rem currentColor;
+    }
+
+    to {
+        text-shadow: 0 0 2rem transparent;
+    }
+}
+
+p {
+    font-size: 1rem;
+    padding: 1rem;
+    animation: flickerOpacity 2s ease-in-out infinite alternate, flickerGlow 2s ease-in-out infinite alternate;
+}
+
+b {
+    display: inline;
+    color: mediumspringgreen;
+}

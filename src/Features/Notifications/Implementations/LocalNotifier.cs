@@ -1,7 +1,9 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Conesoft.Plugin.NotificationService.Features.Notifications.Content;
+using Conesoft.Plugin.NotificationService.Features.Notifications.Interfaces;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 
-namespace Conesoft.Plugin.NotificationService.Notifiers;
+namespace Conesoft.Plugin.NotificationService.Features.Notifications.Implementations;
 
 class LocalNotifier : INotifier
 {

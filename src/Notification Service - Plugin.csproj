@@ -4,11 +4,21 @@
 		<TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
 		<RootNamespace>Conesoft.Plugin.NotificationService</RootNamespace>
 		<Nullable>enable</Nullable>
+		<AssemblyName>‎</AssemblyName>
+		<ApplicationIcon>transparent.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Conesoft.Hosting" Version="3.4.0" />
+	  <Content Include="transparent.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Conesoft.Hosting" Version="3.4.10" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-		<PackageReference Include="System.Drawing.Common" Label="Used only to fix Security Issue in Microsoft.Toolkit.Uwp.Notifications"  Version="[4.7.2]" />
+		<PackageReference Include="System.Drawing.Common" Label="Used only to fix Security Issue in Microsoft.Toolkit.Uwp.Notifications" Version="[4.7.2]" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\blazor-components\src\Blazor Components.csproj" />
 	</ItemGroup>
 </Project>

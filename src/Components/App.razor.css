@@ -1,0 +1,16 @@
+::deep html, body {
+    background: black;
+    color: lightgray;
+    font-family: monospace;
+    font-weight: 100;
+    place-content: center;
+    min-height: 100%;
+    overflow: clip;
+    display: grid;
+    app-region: drag;
+    grid-template-rows: 1fr;
+}
+
+::deep *:not(:has(*)) {
+    app-region: no-drag !important;
+}

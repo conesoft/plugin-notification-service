@@ -1,6 +1,8 @@
 ﻿using Conesoft.Files;
 using Conesoft.Hosting;
 
+namespace Conesoft.Plugin.NotificationService.Features.ContentStorage;
+
 class Storage
 {
     private readonly HostEnvironment environment;

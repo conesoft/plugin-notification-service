@@ -1,6 +1,8 @@
-﻿using Serilog;
+﻿using Conesoft.Plugin.NotificationService.Features.Notifications.Content;
+using Conesoft.Plugin.NotificationService.Features.Notifications.Interfaces;
+using Serilog;
 
-namespace Conesoft.Plugin.NotificationService.Notifiers;
+namespace Conesoft.Plugin.NotificationService.Features.Notifications.Implementations;
 
 class LogNotifier : INotifier
 {
