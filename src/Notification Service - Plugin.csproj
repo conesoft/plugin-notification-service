@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Conesoft.Hosting" Version="3.4.10" />
+		<PackageReference Include="Conesoft.Hosting" Version="3.4.12" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
 		<PackageReference Include="System.Drawing.Common" Label="Used only to fix Security Issue in Microsoft.Toolkit.Uwp.Notifications" Version="[4.7.2]" />
 	</ItemGroup>
