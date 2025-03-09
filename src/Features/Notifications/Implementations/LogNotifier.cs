@@ -13,7 +13,8 @@ class LogNotifier : INotifier
             notification.Title,
             notification.Message,
             notification.Url,
-            Image = notification.Image != null
+            Image = notification.Image != null,
+            notification.To
         });
     }
 }

@@ -5,7 +5,6 @@ using Conesoft.Plugin.NotificationService.Features.Notifications.Interfaces;
 using FolkerKinzel.DataUrls;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,17 +12,21 @@ using System.Threading.Tasks;
 
 namespace Conesoft.Plugin.NotificationService.Features.Notifications.Services;
 
-class NotificationWatcher(Storage storage, IEnumerable<INotifier> notifiers) : BackgroundService
+class NotificationWatcher(Storage storage, IEnumerable<INotifier> notifiers) : IHostedService
 {
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    CancellationTokenSource? cts;
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         var notificationsDirectory = storage.Notifications;
         var contentDirectory = storage.Content;
 
-        try
+        bool processing = false;
+
+        cts = notificationsDirectory.Live(async () =>
         {
-            await foreach (var _ in notificationsDirectory.Live(cancellation: stoppingToken))
+            if(processing == false)
             {
+                processing = true;
                 var filtered = notificationsDirectory.FilteredFiles("*.json", allDirectories: false);
                 while (filtered.Any())
                 {
@@ -44,7 +47,8 @@ class NotificationWatcher(Storage storage, IEnumerable<INotifier> notifiers) : B
                                 content.Title,
                                 content.Message,
                                 Image: image,
-                                content.Url
+                                content.Url,
+                                content.To
                             );
 
                             foreach (var notifier in notifiers)
@@ -53,19 +57,15 @@ class NotificationWatcher(Storage storage, IEnumerable<INotifier> notifiers) : B
                             }
                         }
 
-                        file.WhenReady.Delete();
-
-                        while (file.Exists)
-                        {
-                            await Task.Delay(10, stoppingToken);
-                        }
+                        await file.WhenReady.Delete();
                     }
                 }
             }
-        }
-        catch (Exception exception)
-        {
-            Log.Error("Exception: {exception}", exception);
-        }
+            processing = false;
+        });
+
+        return Task.CompletedTask;
     }
+
+    public Task StopAsync(CancellationToken cancellationToken) => cts?.CancelAsync() ?? Task.CompletedTask;
 }

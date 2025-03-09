@@ -9,20 +9,23 @@ class LocalNotifier : INotifier
 {
     void INotifier.Show(Notification notification)
     {
-        var builder = new ToastContentBuilder();
-        builder.AddText(notification.Title, AdaptiveTextStyle.Title);
-        builder.AddText(notification.Message);
-
-        if (notification.Image != null)
+        if (notification.To == null || notification.To == "Family" || notification.To == "davepermen" || notification.To == "Admin")
         {
-            builder.AddHeroImage(new Uri(notification.Image.Path, UriKind.Absolute));
-        }
+            var builder = new ToastContentBuilder();
+            builder.AddText(notification.Title, AdaptiveTextStyle.Title);
+            builder.AddText(notification.Message);
 
-        if (notification.Url != null)
-        {
-            builder.AddToastActivationInfo(notification.Url, ToastActivationType.Protocol);
-        }
+            if (notification.Image != null)
+            {
+                builder.AddHeroImage(new Uri(notification.Image.Path, UriKind.Absolute));
+            }
 
-        builder.Show();
+            if (notification.Url != null)
+            {
+                builder.AddToastActivationInfo(notification.Url, ToastActivationType.Protocol);
+            }
+
+            builder.Show();
+        }
     }
 }
