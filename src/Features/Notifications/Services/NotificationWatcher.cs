@@ -5,6 +5,7 @@ using Conesoft.Plugin.NotificationService.Features.Notifications.Interfaces;
 using FolkerKinzel.DataUrls;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,48 +21,43 @@ class NotificationWatcher(Storage storage, IEnumerable<INotifier> notifiers) : I
         var notificationsDirectory = storage.Notifications;
         var contentDirectory = storage.Content;
 
-        bool processing = false;
+        var last = DateTime.MinValue;
 
-        cts = notificationsDirectory.Live(async () =>
+        cts = notificationsDirectory.Live(() =>
         {
-            if(processing == false)
+            while (notificationsDirectory.FilteredFiles("*.json", allDirectories: false).OrderByDescending(e => e.Info.LastWriteTimeUtc).FirstOrDefault() is File file)
             {
-                processing = true;
-                var filtered = notificationsDirectory.FilteredFiles("*.json", allDirectories: false);
-                while (filtered.Any())
+                if (last != file.Info.CreationTime)
                 {
-                    if (notificationsDirectory.FilteredFiles("*.json", allDirectories: false).OrderByDescending(e => e.Info.LastWriteTimeUtc).FirstOrDefault() is File file)
+                    last = file.Info.CreationTime;
+                    Log.Information("notification from " + file.Name);
+
+                    if (file.WhenReady.Now.ReadFromJson<NotificationFromJson>() is NotificationFromJson content)
                     {
-                        Log.Information("notification from " + file.Name);
-
-                        if (await file.WhenReady.ReadFromJson<NotificationFromJson>() is NotificationFromJson content)
+                        File? image = null;
+                        if (DataUrl.TryGetBytes(content.DataUrlEncodedImage, out var bytes, out var extension) && bytes != null && extension != null)
                         {
-                            File? image = null;
-                            if (DataUrl.TryGetBytes(content.DataUrlEncodedImage, out var bytes, out var extension) && bytes != null && extension != null)
-                            {
-                                image = contentDirectory / Filename.From(file.NameWithoutExtension, extension);
-                                await image.WriteBytes(bytes);
-                            }
-
-                            var notification = new Notification(
-                                content.Title,
-                                content.Message,
-                                Image: image,
-                                content.Url,
-                                content.To
-                            );
-
-                            foreach (var notifier in notifiers)
-                            {
-                                notifier.Show(notification);
-                            }
+                            image = contentDirectory / Filename.From(file.NameWithoutExtension, extension);
+                            image.Now.WriteBytes(bytes);
                         }
 
-                        await file.WhenReady.Delete();
+                        var notification = new Notification(
+                            content.Title,
+                            content.Message,
+                            Image: image,
+                            content.Url,
+                            content.To
+                        );
+
+                        foreach (var notifier in notifiers)
+                        {
+                            notifier.Show(notification);
+                        }
                     }
+
+                    file.WhenReady.Now.Delete();
                 }
             }
-            processing = false;
         });
 
         return Task.CompletedTask;
